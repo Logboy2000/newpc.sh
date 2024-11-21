@@ -15,11 +15,11 @@ sudo pacman -S --needed yay
 
 # Install all required software packages in one chonky command
 yay -S --needed \
-  libreoffice-fresh kdenlive vscodium flatpak discover obs-studio plasma intellij-idea-community-edition arduino-ide gst-libav gst-plugins-good gst-plugins-bad gst-plugins-ugly gamemode lib32-gamemode mangohud lib32-mangohud steam git curl wget base-devel fastfetch btop appimagelauncher godot davinci-resolve
+  libreoffice-fresh kdenlive flatpak discover obs-studio plasma intellij-idea-community-edition arduino-ide gst-libav gst-plugins-good gst-plugins-bad gst-plugins-ugly gamemode lib32-gamemode mangohud lib32-mangohud steam git curl wget base-devel fastfetch btop appimagelauncher godot davinci-resolve
 
 # Configure and install Flatpaks
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub io.freetubeapp.FreeTube io.github.shiftey.Desktop com.github.tchx84.Flatseal sh.cider.Cider io.github.everestapi.Olympus io.github.fastrizwaan.WineZGUI com.usebottles.bottles io.github.zen_browser.zen
+flatpak install flathub io.freetubeapp.FreeTube io.github.shiftey.Desktop com.github.tchx84.Flatseal sh.cider.Cider io.github.everestapi.Olympus io.github.fastrizwaan.WineZGUI com.usebottles.bottles io.github.zen_browser.zen com.orama_interactive.Pixelorama com.visualstudio.code
 
 # Prompt for reboot
 echo -e "${RED}Installation complete!${NC} ${GREEN}Rebooting the system is recommended.${NC}"
