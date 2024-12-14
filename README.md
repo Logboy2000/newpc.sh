@@ -1,2 +1,2 @@
 # newpc.sh
- a script for when i install my new computer
+ A GUI script for when I install a new computer
