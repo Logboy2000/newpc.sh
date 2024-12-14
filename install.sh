@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check if dialog is installed
+# Check if dialog is installed 
 if ! command -v dialog &> /dev/null; then
     echo "Error: 'dialog' is not installed/accessible. 'dialog' is needed to continue."
     exit 1
