@@ -12,7 +12,6 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-# Function to display messages using dialog
 show_message() {
     local title=$1
     local msg=$2
@@ -21,13 +20,11 @@ show_message() {
     dialog --title "${title}" --msgbox "${msg}" 10 50
 }
 
-# Exit script
 exit_script() {
     clear
     exit 0
 }
 
-# Update system
 update_system() {
     clear
     dialog --title "Updating System" --infobox "Updating system..." 5 40
@@ -38,7 +35,6 @@ update_system() {
     show_message "System update" "System updated successfully!" "$GREEN"
 }
 
-# Install system packages
 install_system_packages() {
     clear
     dialog --title "Installing System Packages" --infobox "Please type sudo password and press Enter" 5 50
@@ -55,12 +51,42 @@ install_system_packages() {
         base-devel
         fastfetch
         btop
+        intellij-idea-community-edition
+        libreoffice-fresh
+	    steam
+        ark  
+        audacity  
+        dolphin  
+        gwenview  
+        kate  
+        kdeconnect  
+        okular  
+        partitionmanager  
+        plasma-systemmonitor  
+        alacritty  
+        btop  
+        git  
+        nano  
+        vim  
+        appimagelauncher  
+        discover  
+        networkmanager  
+        ufw  
+        system-config-printer  
+        noto-fonts  
+        noto-fonts-cjk  
+        noto-fonts-emoji  
+        cachyos-emerald-kde-theme-git  
+        cachyos-iridescent-kde  
+        cachyos-nord-kde-theme-git  
+        cachyos-kde-settings  
+        ffmpegthumbs  
+        yt-dlp  
     )
     yay -S --needed "${packages[@]}" --noconfirm
     show_message "Package Install" "System packages installed successfully!" "$GREEN"
 }
 
-# Install Flatpak apps
 install_flatpaks() {
     clear
     dialog --title "Installing Flatpaks" --infobox "Installing Flatpaks..." 5 50
@@ -76,11 +102,8 @@ install_flatpaks() {
         com.orama_interactive.Pixelorama
         com.vscodium.codium
         io.github.flattool.Warehouse
-        org.libreoffice.LibreOffice
         org.kde.kdenlive
         com.obsproject.Studio
-        com.jetbrains.IntelliJ-IDEA-Community
-        com.valvesoftware.Steam
         org.godotengine.Godot
     )
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -139,10 +162,10 @@ while true; do
             prompt_reboot
             ;;
         5)
-            exit_script
+            open_github
             ;;
         6)
-            open_github
+            exit_script
             ;;
         *)
             show_message "If you see this something went terribly wrong" "$RED"
