@@ -1,13 +1,31 @@
 #!/bin/bash
 
-# Check if dialog is installed 
-if ! command -v dialog &> /dev/null; then
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" &> /dev/null
+}
+
+# Check if dialog is installed
+if ! command_exists dialog; then
     echo "Error: 'dialog' is not installed/accessible. 'dialog' is needed to continue."
-    exit 1
+    
+    # Ask the user if they want to install dialog
+    read -p "Do you want to install 'dialog'? (y/n): " install_choice
+    if [[ "$install_choice" == "y" || "$install_choice" == "Y" ]]; then
+        echo "Installing 'dialog'..."
+        sudo pacman -S dialog
+        if ! command_exists dialog; then
+            echo "Failed to install 'dialog'. Exiting."
+            exit 1
+        fi
+    else
+        echo "Exiting. 'dialog' is required to proceed."
+        exit 1
+    fi
 fi
+
 clear
 
-# Color codes (we'll keep them for consistency, but dialog will handle messages)
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
@@ -15,7 +33,6 @@ NC='\033[0m'
 show_message() {
     local title=$1
     local msg=$2
-    local color=$3
     
     dialog --title "${title}" --msgbox "${msg}" 10 50
 }
@@ -27,84 +44,88 @@ exit_script() {
 
 update_system() {
     clear
-    dialog --title "Updating System" --infobox "Updating system..." 5 40
-    flatpak update
+    flatpak update -y
     dialog --title "Installing System Packages" --infobox "Please type sudo password and press Enter" 5 50
-    sudo dialog --title "Installing System Packages" --infobox "Thanks bro" 5 50
-    yay -Syu
+    sudo dialog --title "Installing System Packages" --infobox "Thanks" 5 50
+    sudo pacman -Syu --noconfirm
     show_message "System update" "System updated successfully!" "$GREEN"
 }
 
 install_system_packages() {
     clear
-    dialog --title "Installing System Packages" --infobox "Please type sudo password and press Enter" 5 50
-    sudo pacman -S --needed yay --noconfirm
-    dialog --title "Installing System Packages" --infobox "Thanks bro" 5 50
-
-    local packages=(
-        flatpak
-        discover
-        plasma
-        git
-        curl
-        wget
-        base-devel
-        fastfetch
-        btop
-        intellij-idea-community-edition
-        libreoffice-fresh
-	    steam
-        ark  
-        audacity  
-        dolphin  
-        gwenview  
-        kate  
-        kdeconnect  
-        okular  
-        partitionmanager  
-        plasma-systemmonitor  
-        alacritty  
-        btop  
-        git  
-        nano  
-        vim  
-        appimagelauncher  
-        discover  
-        networkmanager  
-        ufw  
-        system-config-printer  
-        noto-fonts  
-        noto-fonts-cjk  
-        noto-fonts-emoji  
-        cachyos-emerald-kde-theme-git  
-        cachyos-iridescent-kde  
-        cachyos-nord-kde-theme-git  
-        cachyos-kde-settings  
-        ffmpegthumbs  
-        yt-dlp  
-    )
-    yay -S --needed "${packages[@]}" --noconfirm
+    sudo pacman -S --needed base-devel git curl wget nano vim networkmanager ufw system-config-printer noto-fonts noto-fonts-cjk noto-fonts-emoji --noconfirm
     show_message "Package Install" "System packages installed successfully!" "$GREEN"
 }
 
 install_flatpaks() {
+
+        dialog --title "Flatpak Not Found" --yesno "Flatpak is not installed. Do you want to install it now?" 10 60
+        if [ $? -eq 0 ]; then
+            # Install Flatpak
+            sudo pacman -S --noconfirm flatpak
+            flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+            show_message "Flatpak Installed" "Flatpak has been installed successfully!"
+        else
+            show_message "Flatpak Not Installed" "Flatpak is required to proceed. Exiting."
+            exit 1
+        fi
+    
+
+
     clear
-    dialog --title "Installing Flatpaks" --infobox "Installing Flatpaks..." 5 50
     local flatpaks=(
-        io.freetubeapp.FreeTube
-        io.github.shiftey.Desktop
+        app.zen_browser.zen
+        com.brave.Browser
+        com.dec05eba.gpu_screen_recorder
+        com.github.finefindus.eyedropper
+        com.github.k4zmu2a.spacecadetpinball
+        com.github.maoschanz.drawing
         com.github.tchx84.Flatseal
-        sh.cider.Cider
+        com.jetbrains.IntelliJ-IDEA-Community
+        com.mattjakeman.ExtensionManager
+        com.obsproject.Studio
+        com.orama_interactive.Pixelorama
+        com.rtosta.zapzap
+        com.surfshark.Surfshark
+        com.usebottles.bottles
+        com.valvesoftware.Steam
+        com.valvesoftware.Steam.Utility.protontricks.Locale
+        com.vscodium.codium
+        com.vysp3r.ProtonPlus
+        de.haeckerfelix.Fragments
+        info.cemu.Cemu
+        io.freetubeapp.FreeTube
+        io.github.Foldex.AdwSteamGtk
+        io.github.amit9838.mousam
+        io.github.celluloid_player.Celluloid
+        io.github.efogdev.mpris-timer
         io.github.everestapi.Olympus
         io.github.fastrizwaan.WineZGUI
-        com.usebottles.bottles
-        io.github.zen_browser.zen
-        com.orama_interactive.Pixelorama
-        com.vscodium.codium
+        io.github.flattool.Ignition
         io.github.flattool.Warehouse
-        org.kde.kdenlive
-        com.obsproject.Studio
+        io.github.nokse22.ultimate-tic-tac-toe
+        io.github.shiftey.Desktop
+        io.gitlab.adhami3310.Impression
+        org.gimp.GIMP
+        org.gnome.Calculator
+        org.gnome.Calendar
+        org.gnome.Firmware
+        org.gnome.Loupe
+        org.gnome.Loupe.HEIC
+        org.gnome.Podcasts
+        org.gnome.World.PikaBackup
+        org.gnome.baobab
+        org.gnome.font-viewer
+        org.gnome.gitlab.somas.Apostrophe
         org.godotengine.Godot
+        org.gtk.Gtk3theme.Breeze
+        org.gtk.Gtk3theme.adw-gtk3-dark
+        org.kde.kdenlive
+        org.kde.krita
+        org.onlyoffice.desktopeditors
+        page.tesk.Refine
+        sh.ppy.osu
+        xyz.xclicker.xclicker
     )
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak install --assumeyes flathub "${flatpaks[@]}"
@@ -124,7 +145,6 @@ open_github() {
     xdg-open "https://github.com/Logboy2000/NewPC" &>/dev/null
     show_message "Opening GitHub" "GitHub should now be open in your default browser." "$GREEN"
 }
-
 
 # Create a menu using dialog
 while true; do
@@ -168,7 +188,7 @@ while true; do
             exit_script
             ;;
         *)
-            show_message "If you see this something went terribly wrong" "$RED"
+            show_message "Unexpected choice. Please try again." "$RED"
             ;;
     esac
 done
