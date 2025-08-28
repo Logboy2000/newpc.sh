@@ -8,7 +8,7 @@ command_exists() {
 # Check if dialog is installed
 if ! command_exists dialog; then
     echo "Error: 'dialog' is not installed/accessible. 'dialog' is needed to continue."
-    
+
     # Ask the user if they want to install dialog
     read -p "Do you want to install 'dialog'? (y/n): " install_choice
     if [[ "$install_choice" == "y" || "$install_choice" == "Y" ]]; then
@@ -33,7 +33,7 @@ NC='\033[0m'
 show_message() {
     local title=$1
     local msg=$2
-    
+
     dialog --title "${title}" --msgbox "${msg}" 10 50
 }
 
@@ -53,7 +53,7 @@ update_system() {
 
 install_system_packages() {
     clear
-    sudo pacman -S --needed base-devel git curl wget nano vim networkmanager ufw system-config-printer noto-fonts noto-fonts-cjk noto-fonts-emoji --noconfirm
+    sudo pacman -S --needed base-devel git curl wget nano vim networkmanager ufw system-config-printer noto-fonts noto-fonts-cjk noto-fonts-emoji gnome-firmware gdm gnome-backgrounds gnome-control-center gnome-keyring networkmanager xdg-user-dirs-gtk steam --noconfirm
     show_message "Package Install" "System packages installed successfully!" "$GREEN"
 }
 
@@ -69,23 +69,15 @@ install_flatpaks() {
             show_message "Flatpak Not Installed" "Flatpak is required to proceed. Exiting."
             exit 1
         fi
-    
+
 
 
     clear
     local flatpaks=(
-        app.zen_browser.zen
-        com.brave.Browser
-        com.dec05eba.gpu_screen_recorder
-        com.github.finefindus.eyedropper
         com.github.k4zmu2a.spacecadetpinball
-        com.github.maoschanz.drawing
         com.github.tchx84.Flatseal
-        com.jetbrains.IntelliJ-IDEA-Community
-        com.mattjakeman.ExtensionManager
         com.obsproject.Studio
         com.orama_interactive.Pixelorama
-        com.rtosta.zapzap
         com.surfshark.Surfshark
         com.usebottles.bottles
         com.valvesoftware.Steam
@@ -95,10 +87,6 @@ install_flatpaks() {
         de.haeckerfelix.Fragments
         info.cemu.Cemu
         io.freetubeapp.FreeTube
-        io.github.Foldex.AdwSteamGtk
-        io.github.amit9838.mousam
-        io.github.celluloid_player.Celluloid
-        io.github.efogdev.mpris-timer
         io.github.everestapi.Olympus
         io.github.fastrizwaan.WineZGUI
         io.github.flattool.Ignition
@@ -107,25 +95,8 @@ install_flatpaks() {
         io.github.shiftey.Desktop
         io.gitlab.adhami3310.Impression
         org.gimp.GIMP
-        org.gnome.Calculator
-        org.gnome.Calendar
-        org.gnome.Firmware
-        org.gnome.Loupe
-        org.gnome.Loupe.HEIC
-        org.gnome.Podcasts
-        org.gnome.World.PikaBackup
-        org.gnome.baobab
-        org.gnome.font-viewer
-        org.gnome.gitlab.somas.Apostrophe
-        org.godotengine.Godot
-        org.gtk.Gtk3theme.Breeze
-        org.gtk.Gtk3theme.adw-gtk3-dark
-        org.kde.kdenlive
-        org.kde.krita
         org.onlyoffice.desktopeditors
-        page.tesk.Refine
         sh.ppy.osu
-        xyz.xclicker.xclicker
     )
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak install --assumeyes flathub "${flatpaks[@]}"
